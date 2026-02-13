@@ -15,12 +15,12 @@ jobs:
           - os: ubuntu-latest
             asset: spotify-insights-linux-x86_64
             pyinstaller_args: ""
-          - os: macos-latest
+          - os: macos-13
             asset: spotify-insights-macos-x86_64
-            pyinstaller_args: "--target-arch x86_64"
+            pyinstaller_args: ""
           - os: macos-latest
             asset: spotify-insights-macos-aarch64
-            pyinstaller_args: "--target-arch arm64"
+            pyinstaller_args: ""
           - os: windows-latest
             asset: spotify-insights-windows-x86_64.exe
             pyinstaller_args: ""
