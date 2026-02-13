@@ -26,8 +26,7 @@ Download the latest binary for your platform from [Releases](https://github.com/
 | Platform | Binary |
 |----------|--------|
 | Linux x86_64 | `spotify-insights-linux-x86_64` |
-| macOS x86_64 | `spotify-insights-macos-x86_64` |
-| macOS Apple Silicon | `spotify-insights-macos-aarch64` |
+| macOS (Apple Silicon) | `spotify-insights-macos-aarch64` |
 | Windows x86_64 | `spotify-insights-windows-x86_64.exe` |
 
 ```bash

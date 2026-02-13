@@ -14,16 +14,10 @@ jobs:
         include:
           - os: ubuntu-latest
             asset: spotify-insights-linux-x86_64
-            pyinstaller_args: ""
-          - os: macos-13
-            asset: spotify-insights-macos-x86_64
-            pyinstaller_args: ""
           - os: macos-latest
             asset: spotify-insights-macos-aarch64
-            pyinstaller_args: ""
           - os: windows-latest
             asset: spotify-insights-windows-x86_64.exe
-            pyinstaller_args: ""
 
     runs-on: ${{ matrix.os }}
 
@@ -48,7 +42,6 @@ jobs:
           --hidden-import spotify_insights.ui.interactive
           --hidden-import spotify_insights.ui.components
           --collect-all textual
-          ${{ matrix.pyinstaller_args }}
           src/spotify_insights/__main__.py
 
       - name: Rename binary (unix)
@@ -89,6 +82,5 @@ jobs:
             --title "$TAG_NAME" \
             --generate-notes \
             artifacts/spotify-insights-linux-x86_64/spotify-insights-linux-x86_64 \
-            artifacts/spotify-insights-macos-x86_64/spotify-insights-macos-x86_64 \
             artifacts/spotify-insights-macos-aarch64/spotify-insights-macos-aarch64 \
             artifacts/spotify-insights-windows-x86_64.exe/spotify-insights-windows-x86_64.exe
