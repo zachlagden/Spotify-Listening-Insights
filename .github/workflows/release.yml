@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset: spotify-insights-linux-x86_64
+            pyinstaller_args: ""
+          - os: macos-latest
+            asset: spotify-insights-macos-x86_64
+            pyinstaller_args: "--target-arch x86_64"
+          - os: macos-latest
+            asset: spotify-insights-macos-aarch64
+            pyinstaller_args: "--target-arch arm64"
+          - os: windows-latest
+            asset: spotify-insights-windows-x86_64.exe
+            pyinstaller_args: ""
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Build binary
+        run: >
+          pyinstaller
+          --onefile
+          --name spotify-insights
+          --hidden-import spotify_insights
+          --hidden-import spotify_insights.ui
+          --hidden-import spotify_insights.ui.static
+          --hidden-import spotify_insights.ui.interactive
+          --hidden-import spotify_insights.ui.components
+          --collect-all textual
+          ${{ matrix.pyinstaller_args }}
+          src/spotify_insights/__main__.py
+
+      - name: Rename binary (unix)
+        if: runner.os != 'Windows'
+        run: |
+          cp dist/spotify-insights "${{ matrix.asset }}"
+          chmod +x "${{ matrix.asset }}"
+
+      - name: Rename binary (windows)
+        if: runner.os == 'Windows'
+        run: |
+          cp dist/spotify-insights.exe "${{ matrix.asset }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: ${{ matrix.asset }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG_NAME" \
+            --title "$TAG_NAME" \
+            --generate-notes \
+            artifacts/spotify-insights-linux-x86_64/spotify-insights-linux-x86_64 \
+            artifacts/spotify-insights-macos-x86_64/spotify-insights-macos-x86_64 \
+            artifacts/spotify-insights-macos-aarch64/spotify-insights-macos-aarch64 \
+            artifacts/spotify-insights-windows-x86_64.exe/spotify-insights-windows-x86_64.exe

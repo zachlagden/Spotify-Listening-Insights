@@ -1,4 +1,53 @@
-history/
+# Dependencies
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.egg
+node_modules/
+
+# Environment
 .env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Secrets
+*.key
+*.pem
+secrets/
+credentials/
+
+# Project-specific
+history/
+*.json
+!.github/**/*.json
 .cache
 .venv/
+.spotify_cache
+.cache-*
+history_full.json
