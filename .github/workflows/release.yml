@@ -55,7 +55,7 @@ jobs:
         run: |
           cp dist/spotify-insights.exe "${{ matrix.asset }}"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.asset }}
           path: ${{ matrix.asset }}
